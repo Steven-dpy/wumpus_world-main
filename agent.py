@@ -1,4 +1,4 @@
-from agent import Agent
+
 """
 Author: Dr Zhibin Liao
 Organisation: School of Computer Science and Information Technology, Adelaide University
@@ -13,7 +13,7 @@ of 2026. Public distribution of this source code is strictly forbidden.
 from definitions import ACTIONS, SENSE_NAMES
 
 
-class Agent(Agent):
+class Agent:
     """Template Wumpus agent.
 
     This class keeps the emulator-facing state deliberately small. Use it as a
@@ -22,8 +22,8 @@ class Agent(Agent):
     choosing the next action in act().
     """
 
-    DIRECTIONS = ['W', 'A', 'S', 'D']
-    VECTORS = {'W':(1, 0), 'A':(0, 1), 'S':(-1, 0), 'D':(0, -1)}
+    DIRECTIONS = ['N', 'E', 'S', 'W']
+    VECTORS = {'N':(1, 0), 'E':(0, 1), 'S':(-1, 0), 'W':(0, -1)}
 
     def __init__(self):
         """Create a fresh agent and initialise its state."""
@@ -32,9 +32,30 @@ class Agent(Agent):
         self.reset()
 
     def reset(self):
+        self.start = (0,0)
+        self.position = (0,0)
+        self.facing = 'E'
+        self.forward_vector = None
+
+        self.plan = []
+        self.has_gold = False
+        self.arrwo_available = True
+        self.wumpus_dead = False
+
+        self.visited = set()
+        self.safe = {(0,0)}
+        self.walls = set()
+        self.no_pit = {(0,0)}
+        self.no_wumpus = {(0,0)}
+        self.breeze_cells = set()
+        self.stench_cells = set()
+        self.senses_at = {}
+        
         """Reset all state before a new cave starts."""
         self.last_senses = None
         self.last_action = None
+
+
 
     def update(self, senses):
         """Receive the latest percept values keyed by sense name."""
