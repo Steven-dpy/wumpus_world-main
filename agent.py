@@ -61,6 +61,21 @@ class Agent:
 
 
     def update(self, senses):
+        if self.last_action == "FORWARD": #Update the position when moving forward.
+            next_cell = self._add(self.position, self.forward_vector) #Calculate the coordinates of the adjacent grid.
+            if senses["Bump"]: #Determine whether there was a collision with a wall
+                self.walls.add(next_cell) #The square ahead is a wall. Add it to the "walls" collection.
+                self.safe.discard(next_cell)
+                self.no_pit.discard(next_cell)
+                self.no_wumpus.discard(next_cell)
+                #Remove from the safe squares, the hole-free squares, and the Wumpus-free squares.
+            else:
+                self.position = next_cell #Update current location
+                self.safe.add(self.position) #Mark the current position as safe
+                self.no_pit.add(self.position)
+                self.no_wumpus.add(self.position)
+                #Mark the current position as free of holes and free of Wumpus.
+
         """Receive the latest percept values keyed by sense name."""
         missing = [name for name in SENSE_NAMES if name not in senses]
         if missing:
