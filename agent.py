@@ -1,3 +1,4 @@
+from agent import Agent
 """
 Author: Dr Zhibin Liao
 Organisation: School of Computer Science and Information Technology, Adelaide University
@@ -12,7 +13,7 @@ of 2026. Public distribution of this source code is strictly forbidden.
 from definitions import ACTIONS, SENSE_NAMES
 
 
-class Agent:
+class Agent(Agent):
     """Template Wumpus agent.
 
     This class keeps the emulator-facing state deliberately small. Use it as a
@@ -20,6 +21,9 @@ class Agent:
     base, or plan you need in reset(), updating it from senses in update(), and
     choosing the next action in act().
     """
+
+    DIRECTIONS = ['W', 'A', 'S', 'D']
+    VECTORS = {'W':(1, 0), 'A':(0, 1), 'S':(-1, 0), 'D':(0, -1)}
 
     def __init__(self):
         """Create a fresh agent and initialise its state."""
