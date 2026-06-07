@@ -19,6 +19,8 @@ class MyAgent(Agent):
             self.has_gold = False
         if not hasattr(self, "back_plan"):
             self.back_plan = []
+        if not hasattr(self, "turn_count"):
+            self.turn_count = 0
         
         if len(self.back_plan) > 0:
             action = self.back_plan.pop(0)
@@ -34,7 +36,13 @@ class MyAgent(Agent):
         elif self.last_senses["Bump"]:
             action = "RIGHT"
         elif self.last_senses["Breeze"] or self.last_senses["Stench"]:
-            self.back_plan = ["RIGHT", "FORWARD"]
+            if self.turn_count % 2 == 0:
+                self.back_plan = ["RIGHT", "FORWARD", "RIGHT"]
+            else:
+                self.back_plan = ["RIGHT", "FORWARD", "LEFT"]
+            
+            self.turn_count = self.turn_count + 1
+
             action = "RIGHT"
 
         else:
@@ -51,7 +59,9 @@ class MyAgent(Agent):
             self.has_gold = False
         if not hasattr(self, "back_plan"):
             self.back_plan = []
-            
+        if not hasattr(self, "turn_count"):
+            self.turn_count = 0
+
         if self.last_action == "GRAB" and senses["Glimmer"] == False:
             self.has_gold = True
 
