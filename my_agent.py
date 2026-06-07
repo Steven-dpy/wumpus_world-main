@@ -15,12 +15,45 @@ class MyAgent(Agent):
 
 
     def act(self):
-        ...
+        if not hasattr(self, "has_gold"):
+            self.has_gold = False
+        if not hasattr(self, "back_plan"):
+            self.back_plan = []
+        
+        if len(self.back_plan) > 0:
+            action = self.back_plan.pop(0)
+            self.remember_action(action)
+            return action
+        
+        if self.last_senses is None:
+            action = "FORWARD"
+        elif self.last_senses["Glimmer"]:
+            action = "GRAB"
+        elif self.has_gold:
+            action = "EXIT"
+        elif self.last_senses["Bump"]:
+            action = "RIGHT"
+        elif self.last_senses["Breeze"] or self.last_senses["Stench"]:
+            self.back_plan = ["RIGHT", "FORWARD"]
+            action = "RIGHT"
+
+        else:
+            action = "FORWARD"
+
+        self.remember_action(action)
+        return action
+    
         return "NO_ACTION"
 
     def update(self, senses):
         super(MyAgent, self).update(senses)
-        ...
+        if not hasattr(self, "has_gold"):
+            self.has_gold = False
+        if not hasattr(self, "back_plan"):
+            self.back_plan = []
+            
+        if self.last_action == "GRAB" and senses["Glimmer"] == False:
+            self.has_gold = True
 
 def parse_args():
     """Read command-line options for launching the logic-agent emulator."""
